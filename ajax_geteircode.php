@@ -97,12 +97,6 @@ function searchAddress($key, $search) {
     //echo urlencode($temp);
 }
 
-//https://api-finder.eircode.ie/Latest/finderfindaddress?key=_b053ca00-aae2-4efa-a047-446dec11235b//txn=ef9L4tW1nI072PMafRQEEcbH0laAbzrl0KWzSNmSPDD2OWDtHHLvBOOT-ujXqkz1
-//address=APARTMENT 8, KIRWAN'S CORNER, KIRWANS LANE, GALWAY
-//addressId=X3hysX0Cikx3J_Du8QTv-4fO6Asfw0MZ0vI35WHE14k=
-//limit=-1
-//geographicAddress=True
-//__reserved.Originator=AutoComplete
 
 
 
