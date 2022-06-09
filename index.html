@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Eircode Lookup</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+    <script>
+       $(document).ready(function(){
+          //$("input").keydown(function(){
+          //   $("input").css("color", "red");
+          //});
+          $("#txtSearch").keyup(function(){
+            console.log($(this).val());
+            if ($(this).val().length > 3) { 
+                lookup($(this).val());
+            }
+          });
+
+          $("#btnLookup").click(function(){
+            var eircode = $('#txtEircode').val();
+            getAddress(eircode);
+          });
+       });
+    </script>
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+      <a class="navbar-brand" href="#">Navbar</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" href="#">Disabled</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+            <div class="dropdown-menu" aria-labelledby="dropdown01">
+              <a class="dropdown-item" href="#">Action</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+          </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+          <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+      </div>
+    </nav>
+
+    <main role="main" class="container">
+
+      <div class="starter-template">
+        <h1>Eircode Lookup</h1>
+        <p class="lead">
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm">
+          <h3>Lookup Address</h3>
+          <label for="txtSearch"></label>
+          <input type="text" class="form-control" id="txtSearch" name="txtSearch" aria-describedby="Search by Address" placeholder="Enter Address">
+          <small id="SearchHelp" class="form-text text-muted">Start typing an address and choose from the list</small>
+          <div id="container" style="width:300px;">
+
+          </div>
+        </div>
+
+        <div class="col-sm">
+      <form>
+        <div class="form-group">
+          <div class="row mt-3">
+            <label for="txtEircode" class="pr-3">Enter Eircode</label>
+            <input type="text" id="txtEircode" placeholder=""  class="mr-3">
+            <button type="button" class="btn btn-primary" id="btnLookup">Check</button>
+          </div>
+
+          <div class="row mt-3">
+            <label for="txtAddress1" class="pr-3">Address line 1: </label>
+            <input type="text" id="txtAddress1" placeholder="Address line 1">
+          </div>
+          <div class="row mt-3">
+            <label for="txtAddress2" class="pr-3">Address line 2: </label>
+            <input type="text" id="txtAddress2" placeholder="Address line 2">
+          </div>
+          <div class="row mt-3">
+            <label for="txtAddress3" class="pr-3">Address line 3: </label>
+            <input type="text" id="txtAddress3" placeholder="Address line 3">
+          </div>
+          <div class="row mt-3">
+            <label for="txtAddress4" class="pr-3">Address line 4: </label>
+            <input type="text" id="txtAddress4" placeholder="Address line 4">
+          </div>
+          <div class="row mt-3">
+            <label for="txtAddress5" class="pr-3">Address line 5: </label>
+            <input type="text" id="txtAddress5" placeholder="Address line 5">
+          </div>
+        </div>
+      </form>
+
+        </div>
+      </div>
+    </div>
+
+        </p>
+      </div>
+
+    </main>
+
+    <script>
+
+    function lookup(term) {
+        console.clear();
+        var url = "ajax_geteircode.php?mode=find";
+        url += "&term=" + encodeURI(term);
+        //console.log(url);
+        $.ajax({
+            url: url,
+            type: 'GET',
+            dataType: 'json',
+            //contentType: 'application/json; charset=utf-8',
+            success: function (result) {
+                //alert(result);
+                if (result.length > 0) populate(result);
+                //console.log(result);
+            },
+            error: function (error) {
+                //alert(error);
+                console.log(error);
+            }
+        });
+    }
+
+    function getEircode(id,address,addressId) {
+        var url = "ajax_geteircode.php?mode=gete";
+        url += "&add=" + address;
+        url += "&aid=" + addressId;
+        //console.log(url);
+        $.ajax({
+            url: url,
+            type: 'GET',
+            dataType: 'text',
+            contentType: 'application/json; charset=utf-8',
+            success: function (result) {            
+                //alert(result);
+                if (result.length > 0) document.getElementById('spancode' + id).innerHTML = result;
+                else console.log('No result returned from getEircode: ' + url);
+                //console.log(result);
+                //return result.responseText;
+            },
+            error: function (error) {
+                console.log(error.message);
+            }
+        });
+    }
+
+    function getAddress(eircode) {
+        var url = "ajax_geteircode.php?mode=geta";
+        url += "&ec=" + eircode.replace(/\s/g,'');
+        $.ajax({
+            url: url,
+            type: 'GET',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            success: function (result) {
+                //console.log(result);
+                fillAddress(result);
+            },
+            error: function (error) {
+                console.log(error.responseText);
+            }
+        });
+    }
+
+    function fillAddress(address) {
+        $('#txtAddress1').val(address[0]);
+        $('#txtAddress2').val(address[1]);
+        $('#txtAddress3').val(address[2]);
+        $('#txtAddress4').val(address[3]);
+        $('#txtAddress5').val(address[4]);
+        $('#txtAddress6').val(address[5]);
+    }
+
+
+    function populate(arr) {
+        //console.clear();
+        var cont = document.getElementById('container');
+        cont.innerHTML = "";
+        var count = 0;
+        arr.forEach(function(item, index) {
+            var spn = document.createElement('span');
+            var spn2 = document.createElement('span');
+            spn.setAttribute('id','span'+count);
+            spn.setAttribute('style','display:inline-block;width:600px;');
+            spn2.setAttribute('id','spancode'+count);
+            spn2.setAttribute('style','display:inline-block;width:150px;color:blue;font-weight:bold;');
+            spn.setAttribute('data-address',item.displayName);
+            spn.setAttribute('data-addressid',item.addressId);
+            spn.setAttribute('data-id',count);
+            spn.innerHTML = item.displayName;
+            cont.appendChild(spn);
+            cont.appendChild(spn2);
+            $("#span" + count).click(function(event){
+                //event.stopPropagation();
+                var eircode = getEircode($(this).data('id'),$(this).data('address'),$(this).data('addressid'));
+                //alert('dmr' + eircode);
+                //console.log(eircode);
+                //alert(item.addressId)
+            });
+            count++;
+
+        });
+
+    }
+    </script>
+
+
+    <!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="../../assets/js/vendor/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  </body>
+</html>
